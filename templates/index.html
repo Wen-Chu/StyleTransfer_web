@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>StyleTransfer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <form action="img1" method="post">
+        <br>
+         <input type="text" name="img1_input">
+        <input type="submit" value="Search Content Image">
+        <br>
+    </form>
+
+    <form action="img2" method="post">
+        <br>
+        <input type="text" name="img2_input">
+        <input type="submit" value="Search Style Image">
+        <br>
+    </form>
+
+    <form action="trans" method="post">
+        <input type="submit" value="Transfer">
+        {% if file1 %}
+        <div>
+            <img src="{{ file1 }}">
+        {% endif %}
+        {% if file2 %}
+            <img src="{{ file2 }}">
+        {% endif %}
+        {% if file3 %}
+            <img src="{{ file3 }}">
+        </div>
+        {% endif %}
+    </form>
+</body>
+</html>
