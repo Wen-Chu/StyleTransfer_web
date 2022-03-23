@@ -14,6 +14,12 @@ app.secret_key = "dhfuihfuhvnjkne,wpa"
 content_img_size = (384, 384)
 style_img_size = (256, 256)
 
+@app.after_request
+def add_header(response):
+    response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
+    response.headers['Cache-Control'] = 'public, max-age=0'
+    return response
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -32,7 +38,7 @@ def readimg2():
                            file2="../static/Images/style_image.png")
 
 @app.route("/trans", methods=['POST', 'GET'])
-def showimg():
+def showimg3():
     img3 = combine()
     img3.save("static/Images/stylized_image.png")
     return render_template("index.html", file1="../static/Images/content_image.png",
@@ -75,7 +81,6 @@ def display_img(images, num):
         return img
 
 def combine():
-    global stylized_image
     hub_handle = 'https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2'
     hub_module = hub.load(hub_handle)
     outputs = hub_module(tf.constant(content_image), tf.constant(style_image))
@@ -83,7 +88,7 @@ def combine():
     return display_img(stylized_image, 2)
 
 def uploadPicture1(img1):
-    global content_image, file1
+    global content_image
     content_image_url = img1.strip()
     content_image = load_image(content_image_url, content_img_size)
     return display_img(content_image, 0)
