@@ -63,22 +63,20 @@ def load_image(image_url, image_size=(256, 256), preserve_aspect_ratio=True):
     return img
 
 def display_img(images, num):
-    n = len(images)
     rgbList = images[0].numpy() * 255
     rgbList = rgbList.astype(int)
     maxval = 255
     height = [384, 256, 384]
     pixels = []
-    for i in range(n):
-        for y in range(height[num]):
-            for x in range(height[num]):
-                pix = rgbList[y][x][0], rgbList[y][x][1], rgbList[y][x][2], maxval
-                pixels.append(pix)
-        img = Image.new('RGBA', (height[num], height[num]))
-        img.putdata(pixels)
-        if num == 0 or num == 2:
-            img = img.resize((256, 256), Image.ANTIALIAS)
-        return img
+    for y in range(height[num]):
+        for x in range(height[num]):
+            pix = rgbList[y][x][0], rgbList[y][x][1], rgbList[y][x][2], maxval
+            pixels.append(pix)
+    img = Image.new('RGBA', (height[num], height[num]))
+    img.putdata(pixels)
+    if num == 0 or num == 2:
+        img = img.resize((256, 256), Image.ANTIALIAS)
+    return img
 
 def combine():
     hub_handle = 'https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2'
@@ -92,6 +90,7 @@ def uploadPicture1(img1):
     content_image_url = img1.strip()
     content_image = load_image(content_image_url, content_img_size)
     return display_img(content_image, 0)
+
 def uploadPicture2(img2):
     global style_image
     style_image_url = img2.strip()
