@@ -6,6 +6,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
+   {% with messages = get_flashed_messages() %}
+         {% if messages %}
+               {% for message in messages %}
+                    <p>{{ message }}</p>
+               {% endfor %}
+         {% endif %}
+      {% endwith %}
     <form action="img1" method="post" onsubmit="btn01.disabled = true; return true;">
         <br>
         <input type="text" name="img1_input" id="text01">

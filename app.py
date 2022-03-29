@@ -1,12 +1,9 @@
-from flask import Flask, render_template, request, flash, send_file
+from flask import Flask, render_template, request, flash
 from PIL import Image
 import functools
 import os
 import tensorflow as tf
 import tensorflow_hub as hub
-from scipy import misc
-import numpy as np
-import sys
 
 app = Flask(__name__)
 app.secret_key = "dhfuihfuhvnjkne,wpa"
@@ -26,16 +23,26 @@ def index():
 
 @app.route("/img1", methods=['POST', 'GET'])
 def readimg1():
-    img1 = uploadPicture1(str(request.form['img1_input']))
-    img1.save("static/Images/content_image.png")
-    return render_template("index.html", file1="../static/Images/content_image.png")
+    img1_input = str(request.form['img1_input']).strip()
+    if img1_input == '' or img1_input[-4:] not in ['.jpg', 'jpeg', '.png']:
+        flash("Content image import error!")
+        return render_template("index.html")
+    else:
+        img1 = uploadPicture1(img1_input)
+        img1.save("static/Images/content_image.png")
+        return render_template("index.html", file1="../static/Images/content_image.png")
 
 @app.route("/img2", methods=['POST', 'GET'])
 def readimg2():
-    img2 = uploadPicture2(str(request.form['img2_input']))
-    img2.save("static/Images/style_image.png")
-    return render_template("index.html", file1="../static/Images/content_image.png",
-                           file2="../static/Images/style_image.png")
+    img2_input = str(request.form['img2_input']).strip()
+    if img2_input == '' or img2_input[-4:] not in ['.jpg', 'jpeg', '.png']:
+        flash("Style image import error!")
+        return render_template("index.html", file1="../static/Images/content_image.png")
+    else:
+        img2 = uploadPicture2(img2_input)
+        img2.save("static/Images/style_image.png")
+        return render_template("index.html", file1="../static/Images/content_image.png",
+                               file2="../static/Images/style_image.png")
 
 @app.route("/trans", methods=['POST', 'GET'])
 def showimg3():
@@ -87,13 +94,11 @@ def combine():
 
 def uploadPicture1(img1):
     global content_image
-    content_image_url = img1.strip()
-    content_image = load_image(content_image_url, content_img_size)
+    content_image = load_image(img1, content_img_size)
     return display_img(content_image, 0)
 
 def uploadPicture2(img2):
     global style_image
-    style_image_url = img2.strip()
-    style_image = load_image(style_image_url, style_img_size)
+    style_image = load_image(img2, style_img_size)
     style_image = tf.nn.avg_pool(style_image, ksize=[3, 3], strides=[1, 1], padding='SAME')
     return display_img(style_image, 1)
