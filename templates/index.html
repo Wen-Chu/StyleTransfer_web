@@ -6,33 +6,58 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
-    <form action="img1" method="post">
+    <form action="img1" method="post" onsubmit="btn01.disabled = true; return true;">
         <br>
-         <input type="text" name="img1_input">
-        <input type="submit" value="Search Content Image">
-        <br>
-    </form>
-
-    <form action="img2" method="post">
-        <br>
-        <input type="text" name="img2_input">
-        <input type="submit" value="Search Style Image">
+        <input type="text" name="img1_input" id="text01">
+{#        <input type="file" name="img1_file" required>#}
+        <input type="submit" value="Search Content Image" id="btn01">
         <br>
     </form>
 
-    <form action="trans" method="post">
-        <input type="submit" value="Transfer">
+    <form action="img2" method="post" onsubmit="btn02.disabled = true; return true;">
+        <br>
+        <input type="text" name="img2_input" id="text02" disabled>
+{#        <input type="file" name="img2_file" required>#}
+        <input type="submit" value="Search Style Image" id="btn02" disabled>
+        <br>
+    </form>
+
+    <form action="trans" method="post" onsubmit="btn03.disabled = true; return true;">
+        <input type="submit" value="Transfer" id="btn03" disabled>
         {% if file1 %}
         <div>
-            <img src="{{ file1 }}">
+            <img src="{{ file1 }}" onload="changetype(1)">
         {% endif %}
         {% if file2 %}
-            <img src="{{ file2 }}">
+            <img src="{{ file2 }}" onload="changetype(2)">
         {% endif %}
         {% if file3 %}
-            <img src="{{ file3 }}">
+            <img src="{{ file3 }}" onload="changetype(3)">
+            <br>
+            <button><a href="../static/Images/stylized_image.png" download="output">
+                Download Image </a></button>
         </div>
         {% endif %}
     </form>
 </body>
+<script type="text/javascript">
+    function changetype(value){
+        　if(value=='1'){
+            document.getElementById('text01').disabled=true;　
+            document.getElementById('text02').disabled=false;
+            document.getElementById('btn01').disabled=true;　
+            document.getElementById('btn02').disabled=false;
+             }
+        else if(value=='2'){
+             document.getElementById('text02').disabled=true;
+             document.getElementById('btn02').disabled=true;
+             document.getElementById('btn03').disabled=false;
+        　}
+        else if(value=='3'){
+            document.getElementById('text01').disabled=false;
+            document.getElementById('btn01').disabled=false;　
+            document.getElementById('btn03').disabled=true;
+         }
+    }
+</script>
 </html>
