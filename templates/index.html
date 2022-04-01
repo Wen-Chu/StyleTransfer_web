@@ -9,14 +9,14 @@
    {% with messages = get_flashed_messages() %}
          {% if messages %}
                {% for message in messages %}
-                    <p>{{ message }}</p>
+                   <p>{{ message }}</p>
                {% endfor %}
          {% endif %}
       {% endwith %}
     <form action="img1" method="post" onsubmit="btn01.disabled = true; return true;">
         <br>
         <input type="text" name="img1_input" id="text01">
-{#        <input type="file" name="img1_file" required>#}
+        <input type="file" name="img1_file"  accept="image/png, image/jpeg, image/png" id="file01">
         <input type="submit" value="Search Content Image" id="btn01">
         <br>
     </form>
@@ -24,7 +24,7 @@
     <form action="img2" method="post" onsubmit="btn02.disabled = true; return true;">
         <br>
         <input type="text" name="img2_input" id="text02" disabled>
-{#        <input type="file" name="img2_file" required>#}
+        <input type="file" name="img2_file" accept="image/png, image/jpeg, image/png" id="file02" disabled>
         <input type="submit" value="Search Style Image" id="btn02" disabled>
         <br>
     </form>
@@ -51,14 +51,19 @@
     function changetype(value){
         　if(value=='1'){
             document.getElementById('text01').disabled=true;　
-            document.getElementById('text02').disabled=false;
+            document.getElementById('text01').value="Uploaded";　
             document.getElementById('btn01').disabled=true;　
+            document.getElementById('file01').disabled=true;　
+            document.getElementById('text02').disabled=false;
+            document.getElementById('file02').disabled=false;
             document.getElementById('btn02').disabled=false;
              }
         else if(value=='2'){
              document.getElementById('text02').disabled=true;
+             document.getElementById('text02').value="Uploaded";
+             document.getElementById('file02').disabled=true;　
              document.getElementById('btn02').disabled=true;
-             document.getElementById('btn03').disabled=false;
+             document.getElementById('bt03').disabled=false;
         　}
         else if(value=='3'){
             document.getElementById('text01').disabled=false;

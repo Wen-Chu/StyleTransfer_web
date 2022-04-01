@@ -23,7 +23,8 @@ def index():
 
 @app.route("/img1", methods=['POST', 'GET'])
 def readimg1():
-    img1_input = str(request.form['img1_input']).strip()
+    # img1_input = str(request.form['img1_input']).strip()
+    img1_input = request.form['img1_file']
     if img1_input == '' or img1_input[-4:] not in ['.jpg', 'jpeg', '.png']:
         flash("Content image import error!")
         return render_template("index.html")
@@ -34,7 +35,8 @@ def readimg1():
 
 @app.route("/img2", methods=['POST', 'GET'])
 def readimg2():
-    img2_input = str(request.form['img2_input']).strip()
+    # img2_input = str(request.form['img2_input']).strip()
+    img2_input = request.form['img2_file']
     if img2_input == '' or img2_input[-4:] not in ['.jpg', 'jpeg', '.png']:
         flash("Style image import error!")
         return render_template("index.html", file1="../static/Images/content_image.png")
