@@ -9,27 +9,47 @@
    {% with messages = get_flashed_messages() %}
          {% if messages %}
                {% for message in messages %}
-                   <p>{{ message }}</p>
+                   <p>{{ message }}</p><br>
                {% endfor %}
          {% endif %}
       {% endwith %}
-    <form action="img1" method="post" onsubmit="btn01.disabled = true; return true;">
+    <form id="form01" action="img1" method="post" onsubmit="btn01.disabled = true; return true;">
+        <p> Upload your content image</p>
         <br>
-        <input type="text" name="img1_input" id="text01">
-        <input type="file" name="img1_file"  accept="image/png, image/jpeg, image/png" id="file01">
-        <input type="submit" value="Search Content Image" id="btn01">
+        <input type="radio" name="rad1" value="rad1_url" id="rad1_url" onclick="img_type(0)" checked>
+        <label id="rad1_text1">URL</label>
+        <input type="radio" name="rad1" value="rad1_file" id="rad1_file" onclick="img_type(1)">
+        <label id="rad1_text2">File</label>
+        <br>
+        <input type="text" name="img1_url" id="url01">
+        <input type="file" name="img1_file" id="file01"  accept="image/png, image/jpeg, image/png"
+               style="display: none;">
+        <input type="submit" value="Upload Content Image" id="btn01">
         <br>
     </form>
-
-    <form action="img2" method="post" onsubmit="btn02.disabled = true; return true;">
+    {% if file1 %}
+        <p>Content image uploaded</p>
         <br>
-        <input type="text" name="img2_input" id="text02" disabled>
-        <input type="file" name="img2_file" accept="image/png, image/jpeg, image/png" id="file02" disabled>
-        <input type="submit" value="Search Style Image" id="btn02" disabled>
+    {% endif %}
+    <form id="form02" action="img2" method="post" onsubmit="btn02.disabled = true; return true;"  style="display: none;">
+        <p> Upload your style image</p>
+        <br>
+        <input type="radio" name="rad2" value="rad2_url" id="rad2_url" onclick="img_type(2)" checked>
+        <label id="rad2_text1">URL</label>
+        <input type="radio" name="rad2" value="rad2_file" id="rad2_file" onclick="img_type(3)">
+        <label id="rad2_text2">File</label>
+        <br>
+        <input type="text" name="img2_url" id="url02">
+        <input type="file" name="img2_file" id="file02" accept="image/png, image/jpeg, image/png"
+               style="display: none;">
+        <input type="submit" value="Upload Style Image" id="btn02">
         <br>
     </form>
-
-    <form action="trans" method="post" onsubmit="btn03.disabled = true; return true;">
+    {% if file2 %}
+        <p>Style image uploaded</p>
+        <br>
+    {% endif %}
+    <form id="form03" action="trans" method="post" onsubmit="btn03.disabled = true; return true;" style="display: none;">
         <input type="submit" value="Transfer" id="btn03" disabled>
         {% if file1 %}
         <div>
@@ -46,30 +66,45 @@
         </div>
         {% endif %}
     </form>
+    <form id="form04" action="again" onsubmit="btn03.disabled = true; return true;" style="display: none;">
+        <input type="submit" value="Try again" id="btn04">
+    </form>
 </body>
 <script type="text/javascript">
+    function img_type(val1){
+        if(val1 == '0'){
+            document.getElementById('url01').style.display='inline';
+            document.getElementById('file01').style.display='none';
+        }
+        else if(val1 == '1') {
+            document.getElementById('url01').style.display='none';
+            document.getElementById('file01').style.display='inline';
+        }
+        else if(val1 == '2') {
+            document.getElementById('url02').style.display='inline';
+            document.getElementById('file02').style.display='none';
+        }
+        else if(val1 == '3') {
+            document.getElementById('url02').style.display='none';
+            document.getElementById('file02').style.display='inline';
+        }
+        return
+    }
     function changetype(value){
         　if(value=='1'){
-            document.getElementById('text01').disabled=true;　
-            document.getElementById('text01').value="Uploaded";　
-            document.getElementById('btn01').disabled=true;　
-            document.getElementById('file01').disabled=true;　
-            document.getElementById('text02').disabled=false;
-            document.getElementById('file02').disabled=false;
-            document.getElementById('btn02').disabled=false;
+            document.getElementById('form01').style.display='none';
+            document.getElementById('form02').style.display='inline';
+            document.getElementById('form03').style.display='inline';
              }
         else if(value=='2'){
-             document.getElementById('text02').disabled=true;
-             document.getElementById('text02').value="Uploaded";
-             document.getElementById('file02').disabled=true;　
-             document.getElementById('btn02').disabled=true;
-             document.getElementById('bt03').disabled=false;
+            document.getElementById('form02').style.display='none';
+            document.getElementById('btn03').disabled=false;
         　}
         else if(value=='3'){
-            document.getElementById('text01').disabled=false;
-            document.getElementById('btn01').disabled=false;　
             document.getElementById('btn03').disabled=true;
+            document.getElementById('form04').style.display='inline';
          }
+        return
     }
 </script>
 </html>
