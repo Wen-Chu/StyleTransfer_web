@@ -35,9 +35,13 @@ def readimg1():
         flash("Content image import error!")
         return render_template("index.html")
     else:
-        img1 = uploadPicture1(img1_input)
-        img1.save("static/Images/content_image.png")
-        return render_template("index.html", file1="../static/Images/content_image.png")
+        try:
+            img1 = uploadPicture1(img1_input)
+            img1.save("static/Images/content_image.png")
+            return render_template("index.html", file1="../static/Images/content_image.png")
+        except:
+            flash("Content image import error!")
+            return render_template("index.html")
 
 @app.route("/img2", methods=['POST', 'GET'])
 def readimg2():
@@ -49,10 +53,14 @@ def readimg2():
         flash("Style image import error!")
         return render_template("index.html", file1="../static/Images/content_image.png")
     else:
-        img2 = uploadPicture2(img2_input)
-        img2.save("static/Images/style_image.png")
-        return render_template("index.html", file1="../static/Images/content_image.png",
-                               file2="../static/Images/style_image.png")
+        try:
+            img2 = uploadPicture2(img2_input)
+            img2.save("static/Images/style_image.png")
+            return render_template("index.html", file1="../static/Images/content_image.png",
+                                   file2="../static/Images/style_image.png")
+        except:
+            flash("Style image import error!")
+            return render_template("index.html", file1="../static/Images/content_image.png")
 
 @app.route("/trans", methods=['POST', 'GET'])
 def showimg3():

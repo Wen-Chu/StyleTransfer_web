@@ -9,18 +9,17 @@
    {% with messages = get_flashed_messages() %}
          {% if messages %}
                {% for message in messages %}
-                   <p>{{ message }}</p><br>
+                   <p style="background-color: palevioletred; color: black">{{ message }}</p><br>
                {% endfor %}
          {% endif %}
       {% endwith %}
     <form id="form01" action="img1" method="post" onsubmit="btn01.disabled = true; return true;">
-        <p> Upload your content image</p>
-        <br>
         <input type="radio" name="rad1" value="rad1_url" id="rad1_url" onclick="img_type(0)" checked>
-        <label id="rad1_text1">URL</label>
+        <label for="rad1_url" id="rad1_text1">URL</label>
         <input type="radio" name="rad1" value="rad1_file" id="rad1_file" onclick="img_type(1)">
-        <label id="rad1_text2">File</label>
+        <label for="rad1_file" id="rad1_text2">File</label>
         <br>
+        <p> Upload your content image</p>
         <input type="text" name="img1_url" id="url01">
         <input type="file" name="img1_file" id="file01"  accept="image/png, image/jpeg, image/png"
                style="display: none;">
@@ -32,13 +31,12 @@
         <br>
     {% endif %}
     <form id="form02" action="img2" method="post" onsubmit="btn02.disabled = true; return true;"  style="display: none;">
-        <p> Upload your style image</p>
-        <br>
         <input type="radio" name="rad2" value="rad2_url" id="rad2_url" onclick="img_type(2)" checked>
-        <label id="rad2_text1">URL</label>
+        <label for="rad2_url" id="rad2_text1">URL</label>
         <input type="radio" name="rad2" value="rad2_file" id="rad2_file" onclick="img_type(3)">
-        <label id="rad2_text2">File</label>
+        <label for="rad2_file" id="rad2_text2">File</label>
         <br>
+        <p> Upload your style image</p>
         <input type="text" name="img2_url" id="url02">
         <input type="file" name="img2_file" id="file02" accept="image/png, image/jpeg, image/png"
                style="display: none;">
@@ -50,7 +48,7 @@
         <br>
     {% endif %}
     <form id="form03" action="trans" method="post" onsubmit="btn03.disabled = true; return true;" style="display: none;">
-        <input type="submit" value="Transfer" id="btn03" disabled>
+        <input type="submit" value="Transfer" id="btn03" onclick="loader()" disabled>
         {% if file1 %}
         <div>
             <img src="{{ file1 }}" onload="changetype(1)">
@@ -63,9 +61,12 @@
             <br>
             <button><a href="../static/Images/stylized_image.png" download="output">
                 Download Image </a></button>
+        {% else %}
+            <div class="loader" id="loader" style="display: none;"></div>
         </div>
         {% endif %}
     </form>
+
     <form id="form04" action="again" onsubmit="btn03.disabled = true; return true;" style="display: none;">
         <input type="submit" value="Try again" id="btn04">
     </form>
@@ -105,6 +106,9 @@
             document.getElementById('form04').style.display='inline';
          }
         return
+    }
+    function loader(){
+            document.getElementById('loader').style.display='block';
     }
 </script>
 </html>
