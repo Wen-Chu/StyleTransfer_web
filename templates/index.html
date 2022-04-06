@@ -48,7 +48,7 @@
         <br>
     {% endif %}
     <form id="form03" action="trans" method="post" onsubmit="btn03.disabled = true; return true;" style="display: none;">
-        <input type="submit" value="Transfer" id="btn03" onclick="loader()" disabled>
+        <input type="submit" value="Transfer" id="btn03" onclick="loader()" disabled><br>
         {% if file1 %}
         <div>
             <img src="{{ file1 }}" onload="changetype(1)">
@@ -58,16 +58,21 @@
         {% endif %}
         {% if file3 %}
             <img src="{{ file3 }}" onload="changetype(3)">
-            <br>
-            <button><a href="../static/Images/stylized_image.png" download="output">
-                Download Image </a></button>
         {% else %}
-            <div class="loader" id="loader" style="display: none;"></div>
+            <div class="loader"  id="loader" style="display: none;">
+                <div class="loader02"  id="loader02" style="display: none;">
+                    <div></div><div></div><div></div><div></div><div></div>
+                    <p class="trans"> Transforming</p>
+                </div>
+            </div>
         </div>
         {% endif %}
     </form>
 
     <form id="form04" action="again" onsubmit="btn03.disabled = true; return true;" style="display: none;">
+        <br>
+        <button><a href="../static/Images/stylized_image.png" download="output" style="text-decoration:none; color: black">
+                Download Styled Image </a></button>
         <input type="submit" value="Try again" id="btn04">
     </form>
 </body>
@@ -108,7 +113,8 @@
         return
     }
     function loader(){
-            document.getElementById('loader').style.display='block';
+            document.getElementById('loader').style.display='inline-block';
+            document.getElementById('loader02').style.display='inline-block';
     }
 </script>
 </html>
