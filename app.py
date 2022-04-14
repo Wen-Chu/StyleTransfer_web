@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, render_template, request, flash
 from PIL import Image
 import functools
 import os
@@ -6,7 +6,7 @@ import tensorflow as tf
 import tensorflow_hub as hub
 
 app = Flask(__name__)
-app.secret_key = "dhfuihfuhvnjkne,wpa"
+app.secret_key = "dhfuihsomakne,wpa"
 
 content_img_size = (384, 384)
 style_img_size = (256, 256)
@@ -31,14 +31,14 @@ def readimg1():
         img1_input = str(request.form['img1_url']).strip()
     else:
         img1_input = request.form['img1_file']
-    if img1_input == '' or img1_input[-4:] not in ['.jpg', 'jpeg', '.png']:
-        flash("Content image import error!")
+    if img1_input == '':
+        flash("Please input content image")
         return render_template("index.html")
     else:
         try:
             img1 = uploadPicture1(img1_input)
-            img1.save("static/Images/content_image.png")
-            return render_template("index.html", file1="../static/Images/content_image.png")
+            img1.save("static/Images/content_image.jpg")
+            return render_template("index.html", file1="../static/Images/content_image.jpg")
         except:
             flash("Content image import error!")
             return render_template("index.html")
@@ -49,25 +49,25 @@ def readimg2():
         img2_input = str(request.form['img2_url']).strip()
     else:
         img2_input = request.form['img2_file']
-    if img2_input == '' or img2_input[-4:] not in ['.jpg', 'jpeg', '.png']:
-        flash("Style image import error!")
-        return render_template("index.html", file1="../static/Images/content_image.png")
+    if img2_input == '':
+        flash("Please input style image")
+        return render_template("index.html", file1="../static/Images/content_image.jpg")
     else:
         try:
             img2 = uploadPicture2(img2_input)
-            img2.save("static/Images/style_image.png")
-            return render_template("index.html", file1="../static/Images/content_image.png",
-                                   file2="../static/Images/style_image.png")
+            img2.save("static/Images/style_image.jpg")
+            return render_template("index.html", file1="../static/Images/content_image.jpg",
+                                   file2="../static/Images/style_image.jpg")
         except:
             flash("Style image import error!")
-            return render_template("index.html", file1="../static/Images/content_image.png")
+            return render_template("index.html", file1="../static/Images/content_image.jpg")
 
 @app.route("/trans", methods=['POST', 'GET'])
 def showimg3():
     img3 = combine()
-    img3.save("static/Images/stylized_image.png")
-    return render_template("index.html", file1="../static/Images/content_image.png",
-                           file2="../static/Images/style_image.png", file3="../static/Images/stylized_image.png")
+    img3.save("static/Images/stylized_image.jpg")
+    return render_template("index.html", file1="../static/Images/content_image.jpg",
+                           file2="../static/Images/style_image.jpg", file3="../static/Images/stylized_image.jpg")
 
 def crop_center(image):
     shape = image.shape
@@ -79,7 +79,14 @@ def crop_center(image):
 
 @functools.lru_cache(maxsize=None)
 def load_image(image_url, image_size=(256, 256), preserve_aspect_ratio=True):
-    image_path = tf.keras.utils.get_file(os.path.basename(image_url)[-128:], image_url)
+    file_name = os.path.basename(image_url)[-128:]
+    try:
+        image_path = tf.keras.utils.get_file(file_name, image_url)
+    except:
+        file_name = file_name.replace('/', '').replace('\\', '').replace(':', '').replace('*', '').replace('?', '') \
+            .replace('"', '').replace('<', '').replace('>', '').replace('|', '')
+        file_name = file_name+'.jpg'
+        image_path = tf.keras.utils.get_file(file_name, image_url)
     img = tf.io.decode_image(
         tf.io.read_file(image_path),
         channels=3, dtype=tf.float32)[tf.newaxis, ...]
