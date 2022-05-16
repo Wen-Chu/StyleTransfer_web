@@ -32,15 +32,15 @@ def readimg1():
     else:
         img1_input = request.form['img1_file']
     if img1_input == '':
-        flash("Please input content image")
+        flash("請輸入內容圖片")
         return render_template("index.html")
     else:
         try:
             img1 = uploadPicture1(img1_input)
-            img1.save("static/Images/content_image.jpg")
-            return render_template("index.html", file1="../static/Images/content_image.jpg")
+            img1.save("static/Images/content_image.png")
+            return render_template("index.html", file1="../static/Images/content_image.png")
         except:
-            flash("Content image import error!")
+            flash("內容圖片上傳錯誤!")
             return render_template("index.html")
 
 @app.route("/img2", methods=['POST', 'GET'])
@@ -50,24 +50,24 @@ def readimg2():
     else:
         img2_input = request.form['img2_file']
     if img2_input == '':
-        flash("Please input style image")
-        return render_template("index.html", file1="../static/Images/content_image.jpg")
+        flash("請輸入風格圖片")
+        return render_template("index.html", file1="../static/Images/content_image.png")
     else:
         try:
             img2 = uploadPicture2(img2_input)
-            img2.save("static/Images/style_image.jpg")
-            return render_template("index.html", file1="../static/Images/content_image.jpg",
-                                   file2="../static/Images/style_image.jpg")
+            img2.save("static/Images/style_image.png")
+            return render_template("index.html", file1="../static/Images/content_image.png",
+                                   file2="../static/Images/style_image.png")
         except:
-            flash("Style image import error!")
-            return render_template("index.html", file1="../static/Images/content_image.jpg")
+            flash("風格圖片上傳錯誤!")
+            return render_template("index.html", file1="../static/Images/content_image.png")
 
 @app.route("/trans", methods=['POST', 'GET'])
 def showimg3():
     img3 = combine()
-    img3.save("static/Images/stylized_image.jpg")
-    return render_template("index.html", file1="../static/Images/content_image.jpg",
-                           file2="../static/Images/style_image.jpg", file3="../static/Images/stylized_image.jpg")
+    img3.save("static/Images/stylized_image.png")
+    return render_template("index.html", file1="../static/Images/content_image.png",
+                           file2="../static/Images/style_image.png", file3="../static/Images/stylized_image.png")
 
 def crop_center(image):
     shape = image.shape
@@ -83,9 +83,19 @@ def load_image(image_url, image_size=(256, 256), preserve_aspect_ratio=True):
     try:
         image_path = tf.keras.utils.get_file(file_name, image_url)
     except:
-        file_name = file_name.replace('/', '').replace('\\', '').replace(':', '').replace('*', '').replace('?', '') \
-            .replace('"', '').replace('<', '').replace('>', '').replace('|', '')
-        file_name = file_name+'.jpg'
+        if '.jpg' in file_name:
+            temp = file_name.split('.jpg')[0]
+            file_name = temp + '.jpg'
+        elif '.jpeg' in file_name:
+            temp = file_name.split('.jpeg')[0]
+            file_name = temp + '.jpg'
+        elif '.png' in file_name:
+            temp = file_name.split('.png')[0]
+            file_name = temp + '.png'
+        else:
+            file_name = file_name.replace('/', '').replace('\\', '').replace(':', '').replace('*', '').replace('?', '') \
+                .replace('"', '').replace('<', '').replace('>', '').replace('|', '')
+            file_name = file_name+'.png'
         image_path = tf.keras.utils.get_file(file_name, image_url)
     img = tf.io.decode_image(
         tf.io.read_file(image_path),

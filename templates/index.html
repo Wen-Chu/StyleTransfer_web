@@ -15,40 +15,40 @@
       {% endwith %}
     <form id="form01" action="img1" method="post" onsubmit="btn01.disabled = true; return true;">
         <input type="radio" name="rad1" value="rad1_url" id="rad1_url" onclick="img_type(0)" checked>
-        <label for="rad1_url" id="rad1_text1">URL</label>
+        <label for="rad1_url" id="rad1_text1">網址</label>
         <input type="radio" name="rad1" value="rad1_file" id="rad1_file" onclick="img_type(1)">
-        <label for="rad1_file" id="rad1_text2">File</label>
+        <label for="rad1_file" id="rad1_text2">本機</label>
         <br>
-        <p> Upload your content image</p>
+        <p>請上傳您的內容圖片</p>
         <input type="text" name="img1_url" id="url01">
         <input type="file" name="img1_file" id="file01"  accept="image/png, image/jpeg, image/png"
                style="display: none;">
-        <input type="submit" value="Upload Content Image" id="btn01">
+        <input type="submit" value="上傳內容圖片" id="btn01">
         <br>
     </form>
     {% if file1 %}
-        <p>Content image uploaded</p>
+        <p>內容圖片已上傳</p>
         <br>
     {% endif %}
     <form id="form02" action="img2" method="post" onsubmit="btn02.disabled = true; return true;"  style="display: none;">
         <input type="radio" name="rad2" value="rad2_url" id="rad2_url" onclick="img_type(2)" checked>
-        <label for="rad2_url" id="rad2_text1">URL</label>
+        <label for="rad2_url" id="rad2_text1">網址</label>
         <input type="radio" name="rad2" value="rad2_file" id="rad2_file" onclick="img_type(3)">
-        <label for="rad2_file" id="rad2_text2">File</label>
+        <label for="rad2_file" id="rad2_text2">本機</label>
         <br>
-        <p> Upload your style image</p>
+        <p>請上傳您的風格圖片</p>
         <input type="text" name="img2_url" id="url02">
         <input type="file" name="img2_file" id="file02" accept="image/png, image/jpeg, image/png"
                style="display: none;">
-        <input type="submit" value="Upload Style Image" id="btn02">
+        <input type="submit" value="上傳風格圖片" id="btn02">
         <br>
     </form>
     {% if file2 %}
-        <p>Style image uploaded</p>
+        <p>風格圖片已上傳</p>
         <br>
     {% endif %}
     <form id="form03" action="trans" method="post" onsubmit="btn03.disabled = true; return true;" style="display: none;">
-        <input type="submit" value="Transfer" id="btn03" onclick="loader()" disabled><br>
+        <input type="submit" value="轉換圖片" id="btn03" onclick="loader()" disabled><br>
         {% if file1 %}
         <div>
             <img src="{{ file1 }}" onload="changetype(1)">
@@ -62,7 +62,7 @@
             <div class="loader"  id="loader" style="display: none;">
                 <div class="loader02"  id="loader02" style="display: none;">
                     <div></div><div></div><div></div><div></div><div></div>
-                    <p class="trans"> Transforming</p>
+                    <p class="trans">轉換中</p>
                 </div>
             </div>
         </div>
@@ -72,8 +72,8 @@
     <form id="form04" action="again" onsubmit="btn03.disabled = true; return true;" style="display: none;">
         <br>
         <button><a href="../static/Images/stylized_image.png" download="output" style="text-decoration:none; color: black">
-                Download Styled Image </a></button>
-        <input type="submit" value="Try again" id="btn04">
+                下載轉換後圖片 </a></button>
+        <input type="submit" value="再玩一次" id="btn04">
     </form>
 </body>
 <script type="text/javascript">
