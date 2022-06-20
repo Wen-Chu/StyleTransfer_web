@@ -1,6 +1,6 @@
 body {
     text-align: center;
-    background-color: SlateGrey;
+    background-color: #8a9aa8;
 }
 input[type="radio"] {
     display:inline-block;
@@ -10,11 +10,10 @@ input[type="radio"] {
 
 .trans{
     color: white;
-    font-family: "Times New Roman";
+    font-family: Microsoft JhengHei;
     font-size: 1.2em;
     display: inline-block;
     margin:  10px;
-    background-color: SlateGrey;
     border-radius: 10px;
     height: 25px;
     width: 180px;
@@ -24,14 +23,29 @@ input[type="radio"] {
 
 p {
     color: black;
-    font-family: "Times New Roman";
+    font-family: Microsoft JhengHei;
     font-size: 1.2em;
+    margin: 15px 15px;
     display: inline-block;
-    margin:  10px;
-    background-color: #abbd81;
+    margin: 15px 15px;
     border-radius: 10px;
-    height: 25px;
-    width: 230px;
+    height: 30px;
+    width: 190px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.success {
+    color: black;
+    font-family: Microsoft JhengHei;
+      background-color: #81bd84;
+    font-size: 1.2em;
+    margin: 15px 15px;
+    display: inline-block;
+    margin: 15px 15px;
+    border-radius: 10px;
+    height: 30px;
+    width: 190px;
     text-align: center;
     vertical-align: middle;
 }
@@ -42,24 +56,49 @@ img {
 input {
   width: 250px;
   margin: 15px 15px;
-  height: 40px;
+  height: 30px;
   border: none;
   border-radius: 10px;
-  font-family: Shanti;
-  font-size: 1.3em;
+  font-family: Microsoft JhengHei;
+  font-size: 1.2em;
   text-align: center;
 }
 
-button{
-  width: 250px;
-  margin: 20px 20px;
-  height: 40px;
+input[type="submit"] {
+  width: 150px;
+  margin: 15px 15px;
+  height: 30px;
   border: none;
   border-radius: 10px;
-  font-family: Shanti;
-  font-size: 1.3em;
+  font-family: Microsoft JhengHei;
+  font-size: 1.2em;
   text-align: center;
+  color: black;
+  background-color: #97aed7;
 }
+
+input[type="submit"]:hover:enabled{
+    background-color: #a5bae3;
+    color: white;
+}
+
+button{
+  width: 150px;
+  margin: 15px 15px;
+  height: 30px;
+  border: none;
+  border-radius: 10px;
+  font-family: Microsoft JhengHei;
+  font-size: 1.2em;
+  text-align: center;
+  background-color: #97aed7;
+}
+
+button:hover:enabled{
+    background-color: #a5bae3;
+    color: white;
+}
+
 button:focus {
     outline: none;
     border: solid 3px #f8b26a;
