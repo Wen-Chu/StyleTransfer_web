@@ -1,2 +1,0 @@
-# StyleTransfer_web
- 
