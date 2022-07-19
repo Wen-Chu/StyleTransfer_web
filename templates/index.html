@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
+    <h1> 遊戲 - 風格轉換 </h1>
    {% with messages = get_flashed_messages() %}
          {% if messages %}
                {% for message in messages %}
@@ -71,7 +72,7 @@
 
     <form id="form04" action="again" onsubmit="btn03.disabled = true; return true;" style="display: none;">
         <br>
-        <button><a href="../static/Images/stylized_image.png" download="output" style="text-decoration:none; color: black">
+        <button><a href="{{ file3 }}" download="output" style="text-decoration:none; color: black">
                 下載轉換後圖片 </a></button>
         <input type="submit" value="再玩一次" id="btn04">
     </form>
@@ -97,15 +98,15 @@
         return
     }
     function changetype(value){
-        　if(value=='1'){
+        if(value=='1'){
             document.getElementById('form01').style.display='none';
             document.getElementById('form02').style.display='inline';
             document.getElementById('form03').style.display='inline';
-             }
+        }
         else if(value=='2'){
             document.getElementById('form02').style.display='none';
             document.getElementById('btn03').disabled=false;
-        　}
+        }
         else if(value=='3'){
             document.getElementById('btn03').disabled=true;
             document.getElementById('form04').style.display='inline';
