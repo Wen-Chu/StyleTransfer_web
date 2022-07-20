@@ -1,13 +1,14 @@
-from ipaddress import ip_address
 from flask import Flask, render_template, request, flash
 from PIL import Image
 import functools
 import os
 import tensorflow as tf
 import tensorflow_hub as hub
+import s_data
 
 app = Flask(__name__)
 app.secret_key = "dhfuihsomakne,wpa"
+app.config['SERVER_NAME'] = s_data.server_name
 
 content_img_size = (384, 384)
 style_img_size = (256, 256)
@@ -20,7 +21,7 @@ def add_header(response):
     response.headers['Cache-Control'] = 'public, max-age=0'
     return response
 
-@app.route("/")
+@app.route("/styletransfer/start")
 def index():
     global user_uni
     user_uni = request.environ['REMOTE_ADDR']
@@ -28,13 +29,12 @@ def index():
         os.mkdir("static/Images/" + user_uni)
     return render_template("index.html")
 
-@app.route("/again")
+@app.route("/styletransfer/again")
 def again():
 	return render_template("index.html")
 
-@app.route("/img1", methods=['POST', 'GET'])
+@app.route("/styletransfer/img1", methods=['POST', 'GET'])
 def readimg1():
-    print(user_uni)
     if request.form['rad1'] == 'rad1_url':
         img1_input = str(request.form['img1_url']).strip()
     else:
@@ -51,7 +51,7 @@ def readimg1():
             flash("內容圖片上傳錯誤！")
             return render_template("index.html")
 
-@app.route("/img2", methods=['POST', 'GET'])
+@app.route("/styletransfer/img2", methods=['POST', 'GET'])
 def readimg2():
     if request.form['rad2'] == 'rad2_url':
         img2_input = str(request.form['img2_url']).strip()
@@ -70,7 +70,7 @@ def readimg2():
             flash("風格圖片上傳錯誤!")
             return render_template("index.html", file1="../static/Images/" + user_uni +"/content_image.png")
 
-@app.route("/trans", methods=['POST', 'GET'])
+@app.route("/styletransfer/trans", methods=['POST', 'GET'])
 def showimg3():
     img3 = combine()
     img3.save("static/Images/" + user_uni +"/stylized_image.png")
@@ -88,7 +88,6 @@ def crop_center(image):
 @functools.lru_cache(maxsize=None)
 def load_image(image_url, image_size=(256, 256), preserve_aspect_ratio=True):
     file_name = os.path.basename(image_url)[-128:]
-    print(file_name)
     try:
         image_path = tf.keras.utils.get_file(file_name, image_url)
     except:
@@ -146,3 +145,6 @@ def uploadPicture2(img2):
     style_image = tf.nn.avg_pool(style_image, ksize=[3, 3], strides=[1, 1], padding='SAME')
     img_temp[user_uni+"style"] = style_image
     return display_img(style_image, 1)
+
+if __name__ == "__main__":
+    app.run(ssl_context=(s_data.cert, s_data.privkey), host='0.0.0.0', port=66)
