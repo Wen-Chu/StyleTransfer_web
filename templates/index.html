@@ -23,7 +23,7 @@
         <p>請上傳您的內容圖片</p>
         <input type="text" name="img1_url" id="url01">
         <input type="file" name="img1_file" id="file01"  accept="image/png, image/jpeg, image/png"
-               style="display: none;">
+               style="display: none;" onchange="Fileconv(1)">
         <input type="submit" value="上傳內容圖片" id="btn01">
         <br>
     </form>
@@ -40,7 +40,7 @@
         <p>請上傳您的風格圖片</p>
         <input type="text" name="img2_url" id="url02">
         <input type="file" name="img2_file" id="file02" accept="image/png, image/jpeg, image/png"
-               style="display: none;">
+               style="display: none;" onchange="Fileconv(2)">
         <input type="submit" value="上傳風格圖片" id="btn02">
         <br>
     </form>
@@ -77,37 +77,71 @@
         <input type="submit" value="再玩一次" id="btn04">
     </form>
 </body>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script>
+    function Fileconv(val1) {
+        if(val1 == '1'){
+            var file = document.getElementById("file01").files[0];  //獲取選中圖片物件（包含檔案的名稱、大小、型別等，如file.size）
+        }
+        else {
+            var file = document.getElementById("file02").files[0];  //獲取選中圖片物件（包含檔案的名稱、大小、型別等，如file.size）
+        }
+        var reader = new FileReader();  //宣告js的檔案流
+        reader.readAsDataURL(file); //通過檔案流將檔案轉換成Base64字串
+        //轉換成功後
+        reader.onloadend = function(e){
+            img_base64 = reader.result; //輸出結果
+            const dic_value = {img_base64}
+            const s = JSON.stringify(dic_value)
+            console.log(s)
+            if(val1 == '1'){
+                $.ajax({
+                    url:"/img1file",
+                    type:'POST',
+                    contentType: "application/json",
+                    data: JSON.stringify(s)})
+            }
+            else {
+                $.ajax({
+                    url:"/img2file",
+                    type:'POST',
+                    contentType: "application/json",
+                    data: JSON.stringify(s)})
+            }
+        }
+    }
+</script>
 <script type="text/javascript">
-    function img_type(val1){
-        if(val1 == '0'){
+    function img_type(val2){
+        if(val2 == '0'){
             document.getElementById('url01').style.display='inline';
             document.getElementById('file01').style.display='none';
         }
-        else if(val1 == '1') {
+        else if(val2 == '1') {
             document.getElementById('url01').style.display='none';
             document.getElementById('file01').style.display='inline';
         }
-        else if(val1 == '2') {
+        else if(val2 == '2') {
             document.getElementById('url02').style.display='inline';
             document.getElementById('file02').style.display='none';
         }
-        else if(val1 == '3') {
+        else if(val2 == '3') {
             document.getElementById('url02').style.display='none';
             document.getElementById('file02').style.display='inline';
         }
         return
     }
-    function changetype(value){
-        if(value=='1'){
+    function changetype(val3){
+        if(val3=='1'){
             document.getElementById('form01').style.display='none';
             document.getElementById('form02').style.display='inline';
             document.getElementById('form03').style.display='inline';
         }
-        else if(value=='2'){
+        else if(val3=='2'){
             document.getElementById('form02').style.display='none';
             document.getElementById('btn03').disabled=false;
         }
-        else if(value=='3'){
+        else if(val3=='3'){
             document.getElementById('btn03').disabled=true;
             document.getElementById('form04').style.display='inline';
          }
