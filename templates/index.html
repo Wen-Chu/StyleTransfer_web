@@ -83,7 +83,7 @@
         if(val1 == '1'){
             var file = document.getElementById("file01").files[0];  //獲取選中圖片物件（包含檔案的名稱、大小、型別等，如file.size）
         }
-        else {
+        else if(val1 == '2'){
             var file = document.getElementById("file02").files[0];  //獲取選中圖片物件（包含檔案的名稱、大小、型別等，如file.size）
         }
         var reader = new FileReader();  //宣告js的檔案流
@@ -101,7 +101,7 @@
                     contentType: "application/json",
                     data: JSON.stringify(s)})
             }
-            else {
+             else if(val1 == '2'){
                 $.ajax({
                     url:"/img2file",
                     type:'POST',

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, url_for, redirect
 from PIL import Image
 import os
 import tensorflow as tf
@@ -33,7 +33,7 @@ def index():
 
 @app.route("/again")
 def again():
-	return render_template("index.html")
+	return redirect(url_for('index'))
 
 @app.route('/img1file', methods=['POST'])
 def img1file():
@@ -85,14 +85,14 @@ def readimg2():
         flash("請輸入風格圖片")
         return render_template("index.html", file1="../static/Images/" + user_uni + "/" + user_uni + "-content_image.png")
     else:
-        try:
-            img2 = uploadPicture2(img2_input, file2)
-            img2.save("static/Images/" + user_uni + "/" + user_uni + "-style_image.png")
-            return render_template("index.html", file1="../static/Images/" + user_uni + "/" + user_uni + "-content_image.png",
-                                   file2="../static/Images/" + user_uni + "/" + user_uni + "-style_image.png")
-        except:
-            flash("風格圖片上傳錯誤!")
-            return render_template("index.html", file1="../static/Images/" + user_uni + "/" + user_uni + "-content_image.png")
+        # try:
+        img2 = uploadPicture2(img2_input, file2)
+        img2.save("static/Images/" + user_uni + "/" + user_uni + "-style_image.png")
+        return render_template("index.html", file1="../static/Images/" + user_uni + "/" + user_uni + "-content_image.png",
+                               file2="../static/Images/" + user_uni + "/" + user_uni + "-style_image.png")
+        # except:
+        #     flash("風格圖片上傳錯誤!")
+        #     return render_template("index.html", file1="../static/Images/" + user_uni + "/" + user_uni + "-content_image.png")
 
 @app.route("/trans", methods=['POST', 'GET'])
 def showimg3():
