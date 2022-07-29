@@ -1,3 +1,5 @@
+import time
+
 from flask import Flask, render_template, request, flash, url_for, redirect
 from PIL import Image
 import os
@@ -37,20 +39,24 @@ def again():
 
 @app.route('/img1file', methods=['POST'])
 def img1file():
+    img_temp[user_uni + "upload_pass"] = False
     output = request.get_json()
     result = json.loads(output)
     result = result["img_base64"].split(',')[1]
     im = Image.open(BytesIO(base64.b64decode(result)))
     im.convert('RGB').save("static/Images/" + user_uni + "/" + user_uni + "-content_image.png")
+    img_temp[user_uni + "upload_pass"] = True
     return result
 
 @app.route('/img2file', methods=['POST'])
 def img2file():
+    img_temp[user_uni + "upload_pass"] = False
     output = request.get_json()
     result = json.loads(output)
     result = result["img_base64"].split(',')[1]
     im = Image.open(BytesIO(base64.b64decode(result)))
     im.convert('RGB').save("static/Images/" + user_uni + "/" + user_uni + "-style_image.png")
+    img_temp[user_uni + "upload_pass"] = True
     return result
 
 @app.route("/img1", methods=['POST', 'GET'])
@@ -61,6 +67,8 @@ def readimg1():
     else:
         img1_input = os.path.abspath(os.path.join('static', 'Images', user_uni, user_uni + "-content_image.png"))
         file1 = True
+        while img_temp[user_uni + "upload_pass"] != True:
+            continue
     if img1_input == '':
         flash("請輸入內容圖片")
         return render_template("index.html")
@@ -81,18 +89,20 @@ def readimg2():
     else:
         img2_input = os.path.abspath(os.path.join('static', 'Images', user_uni, user_uni + "-style_image.png"))
         file2 = True
+        while img_temp[user_uni + "upload_pass"] != True:
+            continue
     if img2_input == '':
         flash("請輸入風格圖片")
         return render_template("index.html", file1="../static/Images/" + user_uni + "/" + user_uni + "-content_image.png")
     else:
-        # try:
-        img2 = uploadPicture2(img2_input, file2)
-        img2.save("static/Images/" + user_uni + "/" + user_uni + "-style_image.png")
-        return render_template("index.html", file1="../static/Images/" + user_uni + "/" + user_uni + "-content_image.png",
-                               file2="../static/Images/" + user_uni + "/" + user_uni + "-style_image.png")
-        # except:
-        #     flash("風格圖片上傳錯誤!")
-        #     return render_template("index.html", file1="../static/Images/" + user_uni + "/" + user_uni + "-content_image.png")
+        try:
+            img2 = uploadPicture2(img2_input, file2)
+            img2.save("static/Images/" + user_uni + "/" + user_uni + "-style_image.png")
+            return render_template("index.html", file1="../static/Images/" + user_uni + "/" + user_uni + "-content_image.png",
+                                   file2="../static/Images/" + user_uni + "/" + user_uni + "-style_image.png")
+        except:
+            flash("風格圖片上傳錯誤!")
+            return render_template("index.html", file1="../static/Images/" + user_uni + "/" + user_uni + "-content_image.png")
 
 @app.route("/trans", methods=['POST', 'GET'])
 def showimg3():

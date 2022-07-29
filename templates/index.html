@@ -52,13 +52,13 @@
         <input type="submit" value="轉換圖片" id="btn03" onclick="loader()" disabled><br>
         {% if file1 %}
         <div>
-            <img src="{{ file1 }}" onload="changetype(1)">
+            <img onload="changetype(1)" src="{{ file1 }}">
         {% endif %}
         {% if file2 %}
-            <img src="{{ file2 }}" onload="changetype(2)">
+            <img onload="changetype(2)" src="{{ file2 }}">
         {% endif %}
         {% if file3 %}
-            <img src="{{ file3 }}" onload="changetype(3)">
+            <img onload="changetype(3)" src="{{ file3 }}">
         {% else %}
             <div class="loader"  id="loader" style="display: none;">
                 <div class="loader02"  id="loader02" style="display: none;">
@@ -80,10 +80,10 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script>
     function Fileconv(val1) {
-        if(val1 == '1'){
+        if(val1 == 1){
             var file = document.getElementById("file01").files[0];  //獲取選中圖片物件（包含檔案的名稱、大小、型別等，如file.size）
         }
-        else if(val1 == '2'){
+        else if(val1 == 2){
             var file = document.getElementById("file02").files[0];  //獲取選中圖片物件（包含檔案的名稱、大小、型別等，如file.size）
         }
         var reader = new FileReader();  //宣告js的檔案流
@@ -93,15 +93,14 @@
             img_base64 = reader.result; //輸出結果
             const dic_value = {img_base64}
             const s = JSON.stringify(dic_value)
-            console.log(s)
-            if(val1 == '1'){
+            if(val1 == 1){
                 $.ajax({
                     url:"/img1file",
                     type:'POST',
                     contentType: "application/json",
                     data: JSON.stringify(s)})
             }
-             else if(val1 == '2'){
+             else if(val1 == 2){
                 $.ajax({
                     url:"/img2file",
                     type:'POST',
@@ -113,35 +112,35 @@
 </script>
 <script type="text/javascript">
     function img_type(val2){
-        if(val2 == '0'){
+        if(val2 == 0){
             document.getElementById('url01').style.display='inline';
             document.getElementById('file01').style.display='none';
         }
-        else if(val2 == '1') {
+        else if(val2 == 1 ) {
             document.getElementById('url01').style.display='none';
             document.getElementById('file01').style.display='inline';
         }
-        else if(val2 == '2') {
+        else if(val2 == 2) {
             document.getElementById('url02').style.display='inline';
             document.getElementById('file02').style.display='none';
         }
-        else if(val2 == '3') {
+        else if(val2 == 3) {
             document.getElementById('url02').style.display='none';
             document.getElementById('file02').style.display='inline';
         }
         return
     }
     function changetype(val3){
-        if(val3=='1'){
+        if(val3== 1){
             document.getElementById('form01').style.display='none';
             document.getElementById('form02').style.display='inline';
             document.getElementById('form03').style.display='inline';
         }
-        else if(val3=='2'){
+        else if(val3== 2){
             document.getElementById('form02').style.display='none';
             document.getElementById('btn03').disabled=false;
         }
-        else if(val3=='3'){
+        else if(val3== 3){
             document.getElementById('btn03').disabled=true;
             document.getElementById('form04').style.display='inline';
          }
