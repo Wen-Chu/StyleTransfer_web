@@ -1,8 +1,6 @@
-import time
-
 from flask import Flask, render_template, request, flash, url_for, redirect
 from PIL import Image
-import os
+import os, shutil
 import tensorflow as tf
 import tensorflow_hub as hub
 import s_data
@@ -30,6 +28,9 @@ def index():
     global user_uni
     user_uni = request.environ['REMOTE_ADDR']
     if not os.path.exists("static/Images/" + user_uni):
+        os.mkdir("static/Images/" + user_uni)
+    else:
+        shutil.rmtree("static/Images/" + user_uni)
         os.mkdir("static/Images/" + user_uni)
     return render_template("index.html")
 
@@ -106,10 +107,14 @@ def readimg2():
 
 @app.route("/trans", methods=['POST', 'GET'])
 def showimg3():
+    dt_img3 = datetime.now()
+    dt_img3 = dt_img3.strftime("%Y%m%d-%H%M%S")
     img3 = combine()
-    img3.save("static/Images/" + user_uni + "/" + user_uni + "-stylized_image.png")
+    img3.save("static/Images/" + user_uni + "/" + dt_img3 + "-stylized_image.png")
+    while not os.path.isfile("static/Images/" + user_uni + "/" + dt_img3 + "-stylized_image.png"):
+        continue
     return render_template("index.html", file1="../static/Images/" + user_uni + "/" + user_uni + "-content_image.png",
-                           file2="../static/Images/" + user_uni + "/" + user_uni + "-style_image.png", file3="../static/Images/" + user_uni + "/" + user_uni + "-stylized_image.png")
+                           file2="../static/Images/" + user_uni + "/" + user_uni + "-style_image.png", file3="../static/Images/" + user_uni + "/" + dt_img3 + "-stylized_image.png")
 
 def crop_center(image):
     shape = image.shape
@@ -140,18 +145,19 @@ def load_image(num, isfile, image_url, image_size=(256, 256)):
                 file_name = file_name.split('?')[0]+'.png'
             image_path = tf.keras.utils.get_file(file_name, image_url)
     else:
-        dt = datetime.now().timestamp()
-        dt = str(dt).replace('.', '-')
+        dt_data = datetime.now()
+        dt_data = dt_data.strftime("%Y%m%d-%H%M%S")
         if num == 1:
-            image_path = tf.keras.utils.get_file(user_uni + "-content_image-" + dt + ".png", 'file:/'+image_url)
+            image_path = tf.keras.utils.get_file(user_uni + "-" + dt_data + "-content_image.png", 'file:/'+image_url)
         else:
-            image_path = tf.keras.utils.get_file(user_uni + "-style_image-" + dt + ".png", 'file:/' + image_url)
+            image_path = tf.keras.utils.get_file(user_uni + "-" + dt_data + "-style_image.png", 'file:/' + image_url)
     img = tf.io.decode_image(
         tf.io.read_file(image_path),
         channels=3, dtype=tf.float32)[tf.newaxis, ...]
     img = crop_center(img)
     img = tf.image.resize(img, image_size, preserve_aspect_ratio=True)
     return img
+
 
 def display_img(images, num):
     rgbList = images[0].numpy() * 255
