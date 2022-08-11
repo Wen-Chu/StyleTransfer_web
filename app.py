@@ -13,7 +13,7 @@ app = Flask(__name__)
 app.secret_key = "dhfuihsomakne,wpa"
 # app.config['SERVER_NAME'] = s_data.server_name
 
-content_img_size = (384, 384)
+content_img_size = (960, 960)
 style_img_size = (256, 256)
 img_temp = {}
 
@@ -124,7 +124,7 @@ def crop_center(image):
     image = tf.image.crop_to_bounding_box(image, offset_y, offset_x, new_shape, new_shape)
     return image
 
-def load_image(num, isfile, image_url, image_size=(256, 256)):
+def load_image(num, isfile, image_url, image_size=(960, 960)):
     if not isfile:
         file_name = os.path.basename(image_url)[-128:]
         try:
@@ -163,7 +163,7 @@ def display_img(images, num):
     rgbList = images[0].numpy() * 255
     rgbList = rgbList.astype(int)
     maxval = 255
-    height = [384, 256, 384]
+    height = [960, 256, 960]
     pixels = []
     for y in range(height[num]):
         for x in range(height[num]):
@@ -172,7 +172,7 @@ def display_img(images, num):
     img = Image.new('RGBA', (height[num], height[num]))
     img.putdata(pixels)
     if num == 0 or num == 2:
-        img = img.resize((256, 256), Image.ANTIALIAS)
+        img = img.resize((960, 960), Image.ANTIALIAS)
     return img
 
 def combine():
