@@ -13,8 +13,6 @@ app = Flask(__name__)
 app.secret_key = "dhfuihsomakne,wpa"
 # app.config['SERVER_NAME'] = s_data.server_name
 
-content_img_size = (960, 960)
-style_img_size = (256, 256)
 img_temp = {}
 
 @app.after_request
@@ -124,7 +122,7 @@ def crop_center(image):
     image = tf.image.crop_to_bounding_box(image, offset_y, offset_x, new_shape, new_shape)
     return image
 
-def load_image(num, isfile, image_url, image_size=(960, 960)):
+def load_image(num, isfile, image_url):
     if not isfile:
         file_name = os.path.basename(image_url)[-128:]
         try:
@@ -155,24 +153,22 @@ def load_image(num, isfile, image_url, image_size=(960, 960)):
         tf.io.read_file(image_path),
         channels=3, dtype=tf.float32)[tf.newaxis, ...]
     img = crop_center(img)
-    img = tf.image.resize(img, image_size, preserve_aspect_ratio=True)
     return img
 
 
-def display_img(images, num):
+def display_img(images, size, num):
     rgbList = images[0].numpy() * 255
     rgbList = rgbList.astype(int)
     maxval = 255
-    height = [960, 256, 960]
     pixels = []
-    for y in range(height[num]):
-        for x in range(height[num]):
+    for y in range(size):
+        for x in range(size):
             pix = rgbList[y][x][0], rgbList[y][x][1], rgbList[y][x][2], maxval
             pixels.append(pix)
-    img = Image.new('RGBA', (height[num], height[num]))
+    img = Image.new('RGBA', (size, size))
     img.putdata(pixels)
     if num == 0 or num == 2:
-        img = img.resize((960, 960), Image.ANTIALIAS)
+        img = img.resize((size, size), Image.ANTIALIAS)
     return img
 
 def combine():
@@ -180,18 +176,25 @@ def combine():
     hub_module = hub.load(hub_handle)
     outputs = hub_module(tf.constant(img_temp.get(user_uni+"content")), tf.constant(img_temp.get(user_uni+"style")))
     stylized_image = outputs[0]
-    return display_img(stylized_image, 2)
+    return display_img(stylized_image, content_image_size, 2)
 
 def uploadPicture1(img1, file1):
-    content_image = load_image(1, file1, img1, content_img_size)
+    content_image = load_image(1, file1, img1)
+    global content_image_size
+    content_image_size = min(content_image.shape[1], content_image.shape[2])
+    if content_image_size > 2000:
+        content_image_size = 1920
+    content_image = tf.image.resize(content_image, (content_image_size, content_image_size), preserve_aspect_ratio=True)
     img_temp[user_uni+"content"] = content_image
-    return display_img(content_image, 0)
+    return display_img(content_image, content_image_size, 0)
 
 def uploadPicture2(img2, file2):
-    style_image = load_image(2, file2, img2, style_img_size)
+    style_image = load_image(2, file2, img2)
+    style_image_size = 256
+    style_image = tf.image.resize(style_image, (style_image_size, style_image_size), preserve_aspect_ratio=True)
     style_image = tf.nn.avg_pool(style_image, ksize=[3, 3], strides=[1, 1], padding='SAME')
     img_temp[user_uni+"style"] = style_image
-    return display_img(style_image, 1)
+    return display_img(style_image, style_image_size, 1)
 
 # if __name__ == "__main__":
 #     app.run(ssl_context=(s_data.cert, s_data.privkey), host='0.0.0.0', port=66)
