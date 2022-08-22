@@ -24,7 +24,7 @@
         <input type="text" name="img1_url" id="url01">
         <input type="file" name="img1_file" id="file01"  accept="image/png, image/jpeg, image/png"
                style="display: none;" onchange="Fileconv(1)">
-        <input type="submit" value="上傳內容圖片" id="btn01" onclick="img12_loader()">
+        <input type="submit" value="上傳內容圖片" id="btn01" onclick="img_loader()">
         <br>
     </form>
     {% if file1 %}
@@ -41,7 +41,7 @@
         <input type="text" name="img2_url" id="url02">
         <input type="file" name="img2_file" id="file02" accept="image/png, image/jpeg, image/png"
                style="display: none;" onchange="Fileconv(2)">
-        <input type="submit" value="上傳風格圖片" id="btn02" onclick="img12_loader()">
+        <input type="submit" value="上傳風格圖片" id="btn02" onclick="img_loader()">
         <br>
     </form>
     {% if file2 %}
@@ -49,44 +49,27 @@
         <br>
     {% endif %}
 
-    <div class="container" id="img12_loader" style="display: none;">
+    <div class="container" id="img_loader" style="display: none;">
         <div class="progress">
             <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
-        <p class="trans">圖片載入中...</p>
+        {% if file2 %}
+            <p class="trans">圖片轉換中...</p>
+        {% else %}
+            <p class="trans">圖片載入中...</p>
+        {% endif %}
     </div>
 
-    <form id="form03" action="trans" method="post" onsubmit="btn03.disabled = true; return true;">
+    <form id="form03" action="trans" method="post" onsubmit="btn03.disabled = true; return true;" onclick="img_loader()">
         <input type="submit" value="轉換圖片" id="btn03" onclick="img3_loader()" style="display: none;"><br></form>
         {% if file1 %}
             <img src="{{ file1 }}" onload="changetype(1)">
-        {% else %}
-{#            <div class="loader"  id="img1_loader" style="display: none;">#}
-{#                <div class="loader02"  id="img1_loader02" style="display: none;">#}
-{#                    <div></div><div></div><div></div><div></div><div></div>#}
-{#                    <p class="trans">內容圖片載入中<br>請稍後</p>#}
-{#                </div>#}
-{#            </div>#}
         {% endif %}
         {% if file2 %}
             <img src="{{ file2 }}" onload="changetype(2)">
-        {% else %}
-{#            <div class="loader"  id="img2_loader" style="display: none;">#}
-{#                <div class="loader02"  id="img2_loader02" style="display: none;">#}
-{#                    <div></div><div></div><div></div><div></div><div></div>#}
-{#                    <p class="trans">風格圖片載入中<br>請稍後</p>#}
-{#                </div>#}
-{#            </div>#}
         {% endif %}
         {% if file3 %}
             <img src="{{ file3 }}" onload="changetype(3)">
-        {% else %}
-            <div class="loader"  id="img3_loader" style="display: none;">
-                <div class="loader02"  id="img3_loader02" style="display: none;">
-                    <div></div><div></div><div></div><div></div><div></div>
-                    <p class="trans">轉換中</p>
-                </div>
-            </div>
         {% endif %}
 
     <form id="form04" action="again" onsubmit="btn03.disabled = true; return true;" style="display: none;">
@@ -165,19 +148,9 @@
          }
         return
     }
-    function img12_loader(){
-            document.getElementById('img12_loader').style.display='inline-block';
-            {#document.getElementById('img1_loader02').style.display='inline-block';#}
+    function img_loader(){
+            document.getElementById('img_loader').style.display='inline-block';
             progress()
-    }
-    {#function img2_loader(){#}
-    {#        document.getElementById('img12_loader').style.display='inline-block';#}
-            {#document.getElementById('img2_loader02').style.display='inline-block';#}
-    {#        progress()#}
-    {#}#}
-    function img3_loader(){
-            document.getElementById('img3_loader').style.display='inline-block';
-            document.getElementById('img3_loader02').style.display='inline-block';
     }
     function progress(){
         var current_progress = 0,
